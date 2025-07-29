@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="CN"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\Zhaowei\AppData\Local\Temp\surefire7029116169253947384\surefirebooter-20250729055156330_3.jar C:\Users\Zhaowei\AppData\Local\Temp\surefire7029116169253947384 2025-07-29T05-51-56_030-jvmRun1 surefire-20250729055156330_1tmp surefire_0-20250729055156330_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Zhaowei\AppData\Local\Temp\surefire8278988451622689963\surefirebooter-20250729063628245_3.jar C:\Users\Zhaowei\AppData\Local\Temp\surefire8278988451622689963 2025-07-29T06-36-27_978-jvmRun1 surefire-20250729063628245_1tmp surefire_0-20250729063628245_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="E:\job\sandbox\wordle\wordle-core\target\test-classes;E:\job\sandbox\wordle\wordle-core\target\classes;C:\Users\Zhaowei\.m2\repository\org\junit\jupiter\junit-jupiter\5.9.3\junit-jupiter-5.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.3\junit-jupiter-api-5.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\Zhaowei\.m2\repository\org\junit\platform\junit-platform-commons\1.9.3\junit-platform-commons-1.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Zhaowei\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.9.3\junit-jupiter-params-5.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.9.3\junit-jupiter-engine-5.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\junit\platform\junit-platform-engine\1.9.3\junit-platform-engine-1.9.3.jar;C:\Users\Zhaowei\.m2\repository\org\projectlombok\lombok\1.18.28\lombok-1.18.28.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Zhaowei\AppData\Local\Temp\surefire7029116169253947384\surefirebooter-20250729055156330_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Zhaowei\AppData\Local\Temp\surefire8278988451622689963\surefirebooter-20250729063628245_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.7+6-LTS"/>
@@ -59,8 +59,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testAllMiss" classname="com.example.wordle.WordleScorerTest" time="0.002"/>
-  <testcase name="testAllPresent" classname="com.example.wordle.WordleScorerTest" time="0.001"/>
-  <testcase name="testExactMatch" classname="com.example.wordle.WordleScorerTest" time="0"/>
+  <testcase name="testAllMiss" classname="com.example.wordle.WordleScorerTest" time="0.001"/>
+  <testcase name="testAllPresent" classname="com.example.wordle.WordleScorerTest" time="0"/>
+  <testcase name="testExactMatch" classname="com.example.wordle.WordleScorerTest" time="0.001"/>
   <testcase name="testMixedCase" classname="com.example.wordle.WordleScorerTest" time="0.001"/>
 </testsuite>

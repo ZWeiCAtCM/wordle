@@ -6,10 +6,17 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+
 /**
  * Manages a single-player Wordle game session.
  */
 public class WordleGame {
+
     private static final int MAX_TURNS = 6;
     private final List<String> wordList;
     private String answer;
@@ -21,7 +28,12 @@ public class WordleGame {
      * Constructor: load wordList and pick a random answer.
      */
     public WordleGame() throws IOException {
-        wordList = Files.readAllLines(Paths.get("src/main/resources/words.txt"));
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("words.txt"); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            if (is == null) {
+                throw new IllegalStateException("words.txt not found on classpath");
+            }
+            wordList = reader.lines().collect(Collectors.toList());
+        }
         answer = wordList.get(new Random().nextInt(wordList.size()));
     }
 
@@ -29,7 +41,12 @@ public class WordleGame {
      * Constructor for test: load wordList and use specific answer.
      */
     public WordleGame(String answer) throws IOException {
-        wordList = Files.readAllLines(Paths.get("src/main/resources/words.txt"));
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("words.txt"); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            if (is == null) {
+                throw new IllegalStateException("words.txt not found on classpath");
+            }
+            wordList = reader.lines().collect(Collectors.toList());
+        }
         if (!wordList.contains(answer)) {
             throw new IllegalArgumentException("Answer must be in word list");
         }
@@ -38,6 +55,7 @@ public class WordleGame {
 
     /**
      * Make a guess. Records marks and returns true if correct.
+     *
      * @param word a valid 5‑letter word
      * @return true if guess equals the answer
      */
@@ -58,27 +76,37 @@ public class WordleGame {
         return won;
     }
 
-    /** @return true if the game is finished (win or used all turns) */
+    /**
+     * @return true if the game is finished (win or used all turns)
+     */
     public boolean isOver() {
         return won || turnsUsed >= MAX_TURNS;
     }
 
-    /** @return true if the player has guessed correctly */
+    /**
+     * @return true if the player has guessed correctly
+     */
     public boolean hasWon() {
         return won;
     }
 
-    /** @return the number of turns used so far */
+    /**
+     * @return the number of turns used so far
+     */
     public int getTurnsUsed() {
         return turnsUsed;
     }
 
-    /** @return the marks from the most recent guess */
+    /**
+     * @return the marks from the most recent guess
+     */
     public WordleScorer.Mark[] getLastMarks() {
         return lastMarks;
     }
 
-    /** @return the secret answer */
+    /**
+     * @return the secret answer
+     */
     public String getAnswer() {
         return answer;
     }

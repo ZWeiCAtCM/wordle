@@ -11,7 +11,7 @@
 
   <modules>
     <module>wordle-core</module>
-    <!-- <module>wordle-cli</module> -->
+    <module>wordle-cli</module>
     <!-- future modules: wordle-server, wordle-frontend, etc. -->
   </modules>
 
