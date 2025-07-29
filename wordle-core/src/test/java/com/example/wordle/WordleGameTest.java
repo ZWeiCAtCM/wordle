@@ -1,6 +1,4 @@
-/*
- * src/test/java/com/example/wordle/WordleGameTest.java
- */
+/* src/test/java/com/example/wordle/WordleGameTest.java */
 package com.example.wordle;
 
 import org.junit.jupiter.api.Test;
@@ -9,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link WordleGame} covering winning, invalid input,
- * and losing scenarios.
+ * and losing scenarios with configurable max turns.
  */
 class WordleGameTest {
 
@@ -19,7 +17,8 @@ class WordleGameTest {
      */
     @Test
     void testWinningScenario() throws IOException {
-        WordleGame game = new WordleGame("apple");
+        // use the three-arg constructor: maxTurns, wordFile, fixed answer
+        WordleGame game = new WordleGame(6, "words.txt", "apple");
         assertFalse(game.isOver(), "Game should not be over before any guess");
         assertFalse(game.hasWon(), "Game should not be won before any guess");
 
@@ -41,7 +40,7 @@ class WordleGameTest {
      */
     @Test
     void testInvalidGuess() throws IOException {
-        WordleGame game = new WordleGame("apple");
+        WordleGame game = new WordleGame(6, "words.txt", "apple");
         assertThrows(IllegalArgumentException.class,
                 () -> game.guess("app"),
                 "Guess shorter than 5 letters should throw IllegalArgumentException");
@@ -56,8 +55,9 @@ class WordleGameTest {
      */
     @Test
     void testLosingAfterMaxTurns() throws IOException {
-        WordleGame game = new WordleGame("apple");
-        for (int i = 0; i < 6; i++) {
+        WordleGame game = new WordleGame(6, "words.txt", "apple");
+        // iterate up to the configured maxTurns
+        for (int i = 0; i < game.getMaxTurns(); i++) {
             assertFalse(game.hasWon(), "Game should not be won before max turns");
             game.guess("bench"); // 'bench' must be present in words.txt
         }

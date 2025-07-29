@@ -1,52 +1,53 @@
 package com.example.wordle;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Random;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
- * Manages a single-player Wordle game session.
+ * Manages a single-player Wordle game session with configurable options.
  */
 public class WordleGame {
-
-    private static final int MAX_TURNS = 6;
+    private final int maxTurns;
     private final List<String> wordList;
     private String answer;
     private int turnsUsed = 0;
     private boolean won = false;
-    private WordleScorer.Mark[] lastMarks;    // ← store last guess result
+    private WordleScorer.Mark[] lastMarks;
 
     /**
-     * Constructor: load wordList and pick a random answer.
+     * Constructor: load wordList from classpath and pick a random answer.
+     * @param maxTurns maximum number of guesses allowed before game over
+     * @param wordFile name of the word list resource (e.g. "words.txt")
+     * @throws IOException if the word list cannot be loaded
      */
-    public WordleGame() throws IOException {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("words.txt"); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+    public WordleGame(int maxTurns, String wordFile) throws IOException {
+        this.maxTurns = maxTurns;
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(wordFile);
+             BufferedReader reader = new BufferedReader(
+                 new InputStreamReader(is, StandardCharsets.UTF_8))) {
             if (is == null) {
-                throw new IllegalStateException("words.txt not found on classpath");
+                throw new IllegalStateException(wordFile + " not found on classpath");
             }
-            wordList = reader.lines().collect(Collectors.toList());
+            this.wordList = reader.lines().collect(Collectors.toList());
         }
-        answer = wordList.get(new Random().nextInt(wordList.size()));
+        this.answer = wordList.get(new Random().nextInt(wordList.size()));
     }
 
     /**
-     * Constructor for test: load wordList and use specific answer.
+     * Test constructor: load wordList and use the provided answer.
+     * @param maxTurns maximum number of guesses allowed
+     * @param wordFile resource name for word list
+     * @param answer the word to be guessed (must exist in the list)
+     * @throws IOException if the word list cannot be loaded
      */
-    public WordleGame(String answer) throws IOException {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("words.txt"); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            if (is == null) {
-                throw new IllegalStateException("words.txt not found on classpath");
-            }
-            wordList = reader.lines().collect(Collectors.toList());
-        }
+    public WordleGame(int maxTurns, String wordFile, String answer) throws IOException {
+        this(maxTurns, wordFile);
         if (!wordList.contains(answer)) {
             throw new IllegalArgumentException("Answer must be in word list");
         }
@@ -55,21 +56,18 @@ public class WordleGame {
 
     /**
      * Make a guess. Records marks and returns true if correct.
-     *
-     * @param word a valid 5‑letter word
+     * @param word a valid 5-letter word
      * @return true if guess equals the answer
      */
     public boolean guess(String word) {
-        if (turnsUsed >= MAX_TURNS || won) {
+        if (turnsUsed >= maxTurns || won) {
             throw new IllegalStateException("Game over");
         }
         if (word == null || word.length() != 5 || !wordList.contains(word)) {
             throw new IllegalArgumentException("Invalid guess");
         }
-
         turnsUsed++;
-        WordleScorer scorer = new WordleScorer();
-        lastMarks = scorer.score(word, answer);  // ← store the marks
+        lastMarks = new WordleScorer().score(word, answer);
         if (word.equals(answer)) {
             won = true;
         }
@@ -77,10 +75,10 @@ public class WordleGame {
     }
 
     /**
-     * @return true if the game is finished (win or used all turns)
+     * @return true if the game is finished (win or max turns reached)
      */
     public boolean isOver() {
-        return won || turnsUsed >= MAX_TURNS;
+        return won || turnsUsed >= maxTurns;
     }
 
     /**
@@ -109,5 +107,19 @@ public class WordleGame {
      */
     public String getAnswer() {
         return answer;
+    }
+
+    /**
+     * @return maximum number of turns allowed
+     */
+    public int getMaxTurns() {
+        return maxTurns;
+    }
+
+    /**
+     * @return the loaded word list
+     */
+    public List<String> getWordList() {
+        return wordList;
     }
 }
