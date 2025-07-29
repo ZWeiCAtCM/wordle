@@ -1,0 +1,5 @@
+# Created at 2025-07-29T05:46:46.597
+Boot Manifest-JAR contains absolute paths in classpath 'E:\job\sandbox\wordle\wordle-core\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
