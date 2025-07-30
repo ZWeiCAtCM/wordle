@@ -5,17 +5,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.wordle.WordleGame;
-import com.example.wordle.server.dto.GuessResponse;
 import com.example.wordle.server.dto.GameState;
+import com.example.wordle.server.dto.GuessResponse;
 
 @Service
 public class GameService {
-    private Map<UUID, WordleGame> games = new ConcurrentHashMap<>();
+    private final Map<UUID, WordleGame> games = new ConcurrentHashMap<>();
 
     public UUID createGame(int maxRounds, String wordFile) throws IOException {
         WordleGame game = new WordleGame(maxRounds, wordFile);
