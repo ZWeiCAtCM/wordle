@@ -8,14 +8,16 @@ import java.util.UUID;
 public class GameState {
     private UUID gameId;
     private int turnsUsed;
+    private int maxTurns;
     private boolean hasWon;
     private boolean isOver;
 
     public GameState() {}
 
-    public GameState(UUID gameId, int turnsUsed, boolean hasWon, boolean isOver) {
+    public GameState(UUID gameId, int turnsUsed, int maxTurns, boolean hasWon, boolean isOver) {
         this.gameId = gameId;
         this.turnsUsed = turnsUsed;
+        this.maxTurns = maxTurns;
         this.hasWon = hasWon;
         this.isOver = isOver;
     }
@@ -30,6 +32,10 @@ public class GameState {
 
     public int getTurnsUsed() {
         return turnsUsed;
+    }
+
+    public int getMaxTurns() {
+        return maxTurns;
     }
 
     public void setTurnsUsed(int turnsUsed) {

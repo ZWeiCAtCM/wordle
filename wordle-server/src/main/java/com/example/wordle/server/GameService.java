@@ -29,12 +29,14 @@ public class GameService {
         if (game == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        
         boolean won = game.guess(guess);
         return new GuessResponse(
             game.getLastMarks(),
             won,
             game.isOver(),
-            game.getTurnsUsed()
+            game.getTurnsUsed(),
+            game.getMaxTurns()
         );
     }
 
@@ -46,6 +48,7 @@ public class GameService {
         return new GameState(
             id,
             game.getTurnsUsed(),
+            game.getMaxTurns(),
             game.hasWon(),
             game.isOver()
         );

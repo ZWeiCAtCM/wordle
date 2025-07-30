@@ -64,7 +64,7 @@ public class WordleGame {
             throw new IllegalStateException("Game over");
         }
         if (word == null || word.length() != 5 || !wordList.contains(word)) {
-            throw new IllegalArgumentException("Invalid guess");
+            throw new IllegalArgumentException("Invalid guess, word length is not 5, or it's not in the words list of the game!");
         }
         turnsUsed++;
         lastMarks = new WordleScorer().score(word, answer);

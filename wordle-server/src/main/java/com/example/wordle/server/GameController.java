@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +30,20 @@ public class GameController {
     }
 
     @PostMapping("/{id}/guesses")
-    public GuessResponse guess(@PathVariable UUID id,
-                               @RequestBody Map<String,String> req) {
-        return svc.submitGuess(id, req.get("guess"));
+    public ResponseEntity<?> guess(
+        @PathVariable UUID id,
+        @RequestBody Map<String,String> req
+    ) {
+        try {
+            GuessResponse resp = svc.submitGuess(id, req.get("guess"));
+            return ResponseEntity.ok(resp);
+        } catch (IllegalArgumentException e) {
+            // catch illegal guess
+            Map<String,String> body = Map.of("message", e.getMessage());
+            return ResponseEntity
+                    .badRequest()
+                    .body(body);
+        }
     }
 
     @GetMapping("/{id}")
