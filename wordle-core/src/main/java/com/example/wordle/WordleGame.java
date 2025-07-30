@@ -13,41 +13,48 @@ import java.util.stream.Collectors;
  * Manages a single-player Wordle game session with configurable options.
  */
 public class WordleGame {
-    private final int maxTurns;
-    private final List<String> wordList;
-    private String answer;
-    private int turnsUsed = 0;
-    private boolean won = false;
-    private WordleScorer.Mark[] lastMarks;
+    protected final int maxTurns;
+    protected final List<String> wordList;
+    protected String answer;
+    protected int turnsUsed = 0;
+    protected boolean won = false;
+    protected WordleScorer.Mark[] lastMarks;
 
     /**
-     * Constructor: load wordList from classpath and pick a random answer.
-     * @param maxTurns maximum number of guesses allowed before game over
-     * @param wordFile name of the word list resource (e.g. "words.txt")
-     * @throws IOException if the word list cannot be loaded
+     * Load the word list from classpath.
      */
-    public WordleGame(int maxTurns, String wordFile) throws IOException {
-        this.maxTurns = maxTurns;
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(wordFile);
+    public static List<String> loadWordList(String wordFile) throws IOException {
+        try (InputStream is = WordleGame.class.getClassLoader().getResourceAsStream(wordFile);
              BufferedReader reader = new BufferedReader(
                  new InputStreamReader(is, StandardCharsets.UTF_8))) {
             if (is == null) {
                 throw new IllegalStateException(wordFile + " not found on classpath");
             }
-            this.wordList = reader.lines().collect(Collectors.toList());
+            return reader.lines().collect(Collectors.toList());
         }
-        this.answer = wordList.get(new Random().nextInt(wordList.size()));
+    }
+
+    /**
+     * Constructor: load wordList from classpath and pick a random answer.
+     */
+    public WordleGame(int maxTurns, String wordFile) throws IOException {
+        this(maxTurns, loadWordList(wordFile));
+    }
+
+    /**
+     * Protected constructor: accept pre-loaded wordList and pick random answer.
+     */
+    protected WordleGame(int maxTurns, List<String> wordList) {
+        this.maxTurns = maxTurns;
+        this.wordList  = wordList;
+        this.answer    = wordList.get(new Random().nextInt(wordList.size()));
     }
 
     /**
      * Test constructor: load wordList and use the provided answer.
-     * @param maxTurns maximum number of guesses allowed
-     * @param wordFile resource name for word list
-     * @param answer the word to be guessed (must exist in the list)
-     * @throws IOException if the word list cannot be loaded
      */
     public WordleGame(int maxTurns, String wordFile, String answer) throws IOException {
-        this(maxTurns, wordFile);
+        this(maxTurns, loadWordList(wordFile));
         if (!wordList.contains(answer)) {
             throw new IllegalArgumentException("Answer must be in word list");
         }
@@ -56,15 +63,14 @@ public class WordleGame {
 
     /**
      * Make a guess. Records marks and returns true if correct.
-     * @param word a valid 5-letter word
-     * @return true if guess equals the answer
      */
     public boolean guess(String word) {
         if (turnsUsed >= maxTurns || won) {
             throw new IllegalStateException("Game over");
         }
         if (word == null || word.length() != 5 || !wordList.contains(word)) {
-            throw new IllegalArgumentException("Invalid guess, word length is not 5, or it's not in the words list of the game!");
+            throw new IllegalArgumentException(
+                "Invalid guess: must be 5 letters and in the word list");
         }
         turnsUsed++;
         lastMarks = new WordleScorer().score(word, answer);
@@ -74,51 +80,30 @@ public class WordleGame {
         return won;
     }
 
-    /**
-     * @return true if the game is finished (win or max turns reached)
-     */
     public boolean isOver() {
         return won || turnsUsed >= maxTurns;
     }
 
-    /**
-     * @return true if the player has guessed correctly
-     */
     public boolean hasWon() {
         return won;
     }
 
-    /**
-     * @return the number of turns used so far
-     */
     public int getTurnsUsed() {
         return turnsUsed;
     }
 
-    /**
-     * @return the marks from the most recent guess
-     */
     public WordleScorer.Mark[] getLastMarks() {
         return lastMarks;
     }
 
-    /**
-     * @return the secret answer
-     */
     public String getAnswer() {
         return answer;
     }
 
-    /**
-     * @return maximum number of turns allowed
-     */
     public int getMaxTurns() {
         return maxTurns;
     }
 
-    /**
-     * @return the loaded word list
-     */
     public List<String> getWordList() {
         return wordList;
     }
