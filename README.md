@@ -51,11 +51,21 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
   - `POST /games` → create a new game, returns `{ "gameId": "..." }`
   - `POST /games/{id}/guesses` → submit a guess, returns marks & status
   - `GET  /games/{id}` → fetch current game state
-- All answer logic and validation are performed server-side; clients never see the answer.
+- All answer logic and validation are performed server-side; clients never see the answer (Task 2).
+
+
+### wordle-client
+
+- Depends on **wordle-core** and uses Java HttpClient + Jackson.
+- CLI client for Task 2:
+  - Automatically fetches current `turnsUsed` and `maxTurns` before each guess
+  - Submits guesses via `POST /games/{id}/guesses`
+  - Handles invalid guesses by showing server's `message` and allowing retry
+  - Displays final answer when game is over
 
 ---
 
-## Task 1: Command‑Line Interface
+## Task 1: Normal wordle
 
 ### Build & Test
 
@@ -80,9 +90,9 @@ Follow the prompt, enter a 5‑letter guess, and view feedback. A legend is show
 
 ---
 
-## Task 2: Server
+## Task 2: Server/client wordle
 
-### Build & Run
+### Build & Run Server
 
 ```bash
 mvn clean install
@@ -126,6 +136,18 @@ curl.exe -X POST http://localhost:8080/games/<uuid>/guesses \
 curl.exe http://localhost:8080/games/<uuid>
 # {"gameId":"<uuid>","turnsUsed":1,"hasWon":false,"isOver":false}
 ```
+### Run Client
+
+```bash
+mvn -pl wordle-client exec:java
+```
+
+Client interacts entirely via HTTP to the server.
+A game success looks like:
+![CLI Screenshot](docs/wordle-client1.jpg)
+
+A game failure looks like:
+![CLI Screenshot](docs/wordle-client2.jpg)
 
 ---
 
