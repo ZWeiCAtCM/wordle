@@ -45,12 +45,14 @@ public class GameService {
         if (game == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        String answer = game.isOver() ? game.getAnswer() : null;
         return new GameState(
             id,
             game.getTurnsUsed(),
             game.getMaxTurns(),
             game.hasWon(),
-            game.isOver()
+            game.isOver(),
+            answer
         );
     }
 }

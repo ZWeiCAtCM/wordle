@@ -54,7 +54,10 @@ public class App {
                     if (hasWon) {
                         System.out.println("Congratulations! You won in " + turnsUsed + " turns.");
                     } else {
-                        System.out.println("Game over. Better luck next time.");
+                        String answer = stateJson.has("answer")
+                                ? stateJson.get("answer").asText()
+                                : "<unknown>";
+                        System.out.println("Game over. The correct word was: " + answer);
                     }
                     break;
                 }
