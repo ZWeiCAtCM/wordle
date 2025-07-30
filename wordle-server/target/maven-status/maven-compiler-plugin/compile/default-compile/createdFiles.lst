@@ -1,5 +1,0 @@
-com\example\wordle\server\dto\GuessResponse.class
-com\example\wordle\server\WordleServerApplication.class
-com\example\wordle\server\GameController.class
-com\example\wordle\server\dto\GameState.class
-com\example\wordle\server\GameService.class
