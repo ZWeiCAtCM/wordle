@@ -2,28 +2,27 @@
 
 This repository contains a multi‑module Maven project implementing a Wordle clone. It is structured into:
 
-- **wordle-core**: Core game logic and data model.  
+- **wordle-core**: Core game logic and data model.
 - **wordle-cli**: A simple command‑line interface for playing Wordle (Task 1).
+- **wordle-server**: REST API server for Task 2, handling game sessions and input validation.
 
 ---
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)  
-- [Modules](#modules)  
-- [Task 1: Command‑Line Interface](#task-1-command-line-interface)  
-  - [Build & Test](#build--test)  
-  - [Running the CLI](#running-the-cli)  
-  - [Configuration](#configuration)  
-- [Next Steps](#next-steps)  
+- [Prerequisites](#prerequisites)
+- [Modules](#modules)
+- [Task 1: Command‑Line Interface](#task-1-command-line-interface)
+- [Task 2: Server](#task-2-server)
+- [Next Steps](#next-steps)
 
 ---
 
 ## Prerequisites
 
-- Java 17 SDK (or later)  
-- Maven 3.6+  
-- Git  
+- Java 17 SDK (or later)
+- Maven 3.6+
+- Git
 
 ---
 
@@ -31,18 +30,28 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 
 ### wordle-core
 
-- Implements `WordleGame` and `WordleScorer`.  
-- Loads a 5‑letter word list from classpath (`src/main/resources/words.txt`).  
+- Implements `WordleGame` and `WordleScorer`.
+- Loads a 5‑letter word list from classpath (`src/main/resources/words.txt`).
 - Supports configurable **maxTurns** and **wordFile** via constructors.
 
 ### wordle-cli
 
-- Depends on **wordle-core**.  
-- Provides `App.java`, a command‑line launcher for Task 1.  
-- Shows per-guess feedback:  
-  - **[X]** = correct letter in correct position  
-  - **(X)** = correct letter in wrong position  
-  - ** X ** = letter not in the word  
+- Depends on **wordle-core**.
+- Provides `App.java` for local CLI play (Task 1).
+- Shows per-guess feedback:
+  - **[X]** = correct letter & position
+  - **(X)** = correct letter wrong position
+  - \*\*  X  \*\* = letter not in word
+
+
+### wordle-server
+
+- Depends on **wordle-core** and Spring Boot.
+- Exposes REST endpoints:
+  - `POST /games` → create a new game, returns `{ "gameId": "..." }`
+  - `POST /games/{id}/guesses` → submit a guess, returns marks & status
+  - `GET  /games/{id}` → fetch current game state
+- All answer logic and validation are performed server-side; clients never see the answer.
 
 ---
 
@@ -53,63 +62,78 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 From the project root:
 
 ```bash
-# Build core and CLI modules, run all tests
 mvn clean install
-
-# Or just run core tests:
 mvn -pl wordle-core test
 ```
 
 ### Running the CLI
 
-You can launch the CLI either via Maven or by running the packaged jar:
-
 ```bash
-# Using Maven exec plugin
 mvn -pl wordle-cli exec:java
-
-# Or after packaging, run the jar directly
+# or
 java -jar wordle-cli/target/wordle-cli-1.0.0-SNAPSHOT.jar
 ```
 
-You will see:
+Follow the prompt, enter a 5‑letter guess, and view feedback. A legend is shown on startup.
 
-```
-Welcome to Command‑Line Wordle!
-Feedback legend: [X] = correct letter & position, (X) = correct letter wrong position,  X  = letter not in word
+![CLI Screenshot](docs/wordle-cli.jpg)
 
-Enter your 5-letter guess (1/6):
-```
+---
 
-Type your 5‑letter guess and press Enter. The CLI shows feedback after each guess and ends with a win/lose message.
+## Task 2: Server
 
-### Configuration
+### Build & Run
 
-By default, the CLI uses:
-
-- **maxRounds** = 6  
-- **wordFile** = `words.txt` (loaded from `wordle-core/src/main/resources`)
-
-To customize, modify the `App.java` invocation of:
-
-```java
-new WordleGame(maxRounds, wordFile)
+```bash
+mvn clean install
+mvn -pl wordle-server spring-boot:run
+# or package and run:
+# mvn -pl wordle-server clean package
+# java -jar wordle-server/target/wordle-server-1.0.0-SNAPSHOT.jar
 ```
 
-or extend it to read settings from:
+The server listens on [**http://localhost:8080**](http://localhost:8080).
 
-- Command‑line arguments (`args[]`)  
-- Environment variables  
-- A configuration file  
+### API Endpoints
+
+| Method | Path                  | Description                          |
+| ------ | --------------------- | ------------------------------------ |
+| POST   | `/games`              | Create new game, returns `gameId`    |
+| POST   | `/games/{id}/guesses` | Submit guess, returns marks & status |
+| GET    | `/games/{id}`         | Retrieve current game state          |
+
+### Examples
+
+**Create game**
+
+```bash
+curl.exe -X POST http://localhost:8080/games
+# {"gameId":"<uuid>"}
+```
+
+**Submit guess**
+
+```bash
+curl.exe -X POST http://localhost:8080/games/<uuid>/guesses \
+  -H "Content-Type: application/json" \
+  -d '{"guess":"apple"}'
+# {"marks":["HIT","MISS",…],"hasWon":false,"isOver":false,"turnsUsed":1}
+```
+
+**Query state**
+
+```bash
+curl.exe http://localhost:8080/games/<uuid>
+# {"gameId":"<uuid>","turnsUsed":1,"hasWon":false,"isOver":false}
+```
 
 ---
 
 ## Next Steps
 
-- **Task 2**: REST API server (`wordle-server` module with Spring Boot).  
-- **Task 3**: “Cheater” service that suggests optimal next guess.  
-- **Task 4**: Multiplayer mode via WebSocket or separate module.  
-- **Frontend**: A web‑based UI (`wordle-frontend`, e.g., React).
+- **Task 3**: Add a “cheater” service to suggest optimal next guesses.
+- **Task 4**: Implement multiplayer mode (e.g., via WebSocket).
+- **wordle-frontend**: Build a web UI (React, Angular, etc.).
 
-Feel free to open issues or submit PRs for additional features or improvements!
+Contributions and feedback are welcome!
 

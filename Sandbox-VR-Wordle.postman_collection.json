@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "2f49e0de-f9e6-4e17-832c-071eda02d75a",
+		"name": "Sandbox-VR-Wordle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33857772"
+	},
+	"item": [
+		{
+			"name": "Guesses",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"guess\": \"apple\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/games/f29bce90-0063-4bf3-b6e8-47c4fee6c67a/guesses\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"f29bce90-0063-4bf3-b6e8-47c4fee6c67a",
+						"guesses\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game by ID",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Game",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
