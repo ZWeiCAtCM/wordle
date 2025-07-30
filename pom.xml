@@ -13,7 +13,7 @@
         <module>wordle-core</module>
         <module>wordle-cli</module>
         <module>wordle-server</module>
-        <!-- <module>wordle-client</module> -->
+        <module>wordle-client</module>
     </modules>
 
     <dependencyManagement>
