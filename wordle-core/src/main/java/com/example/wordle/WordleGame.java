@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class WordleGame {
     protected final int maxTurns;
     protected final List<String> wordList;
+    private String wordFile;
     protected String answer;
     protected int turnsUsed = 0;
     protected boolean won = false;
@@ -39,6 +40,7 @@ public class WordleGame {
      */
     public WordleGame(int maxTurns, String wordFile) throws IOException {
         this(maxTurns, loadWordList(wordFile));
+        this.wordFile = wordFile;
     }
 
     /**
@@ -106,5 +108,9 @@ public class WordleGame {
 
     public List<String> getWordList() {
         return wordList;
+    }
+    
+    public String getWordFile() {
+        return wordFile;
     }
 }

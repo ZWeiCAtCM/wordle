@@ -20,29 +20,31 @@ import com.example.wordle.server.dto.GuessResponse;
 @RequestMapping("/games")
 public class GameController {
 
+    private final GameService svc;
+
     @Autowired
-    private GameService svc;
+    public GameController(GameService svc) {
+        this.svc = svc;
+    }
 
     @PostMapping
     public Map<String, UUID> newGame() throws IOException {
-        UUID id = svc.createGame(6, "words.txt");
+        UUID id = svc.createGame();
         return Map.of("gameId", id);
     }
 
     @PostMapping("/{id}/guesses")
     public ResponseEntity<?> guess(
         @PathVariable UUID id,
-        @RequestBody Map<String,String> req
+        @RequestBody Map<String, String> req
     ) {
         try {
             GuessResponse resp = svc.submitGuess(id, req.get("guess"));
             return ResponseEntity.ok(resp);
         } catch (IllegalArgumentException e) {
-            // catch illegal guess
-            Map<String,String> body = Map.of("message", e.getMessage());
             return ResponseEntity
                     .badRequest()
-                    .body(body);
+                    .body(Map.of("message", e.getMessage()));
         }
     }
 

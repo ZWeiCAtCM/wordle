@@ -19,7 +19,11 @@ public class CheatingWordleGame extends WordleGame {
 
     public CheatingWordleGame(int maxTurns, String wordFile) throws IOException {
         super(maxTurns, loadWordList(wordFile));
-        this.candidates = new ArrayList<>(getWordList());
+        this.candidates = new ArrayList<>(loadWordList(wordFile));
+    }
+    @Override
+    public List<String> getWordList() {
+        return candidates;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class CheatingWordleGame extends WordleGame {
         if (isOver()) {
             throw new IllegalStateException("Game over");
         }
-        if (word == null || word.length() != 5 || !getWordList().contains(word)) {
+        if (word == null || word.length() != 5 || !this.wordList.contains(word)) {
             throw new IllegalArgumentException(
                 "Invalid guess: must be 5 letters and in the word list");
         }
