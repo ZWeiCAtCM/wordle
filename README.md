@@ -201,7 +201,7 @@ You can also use to the postman Collection in the root of this repo for API call
 Sandbox-VR-Wordle.postman_collection.json
 ```
 
-An example run in cheat mode:
+An example run in cheat mode, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
 
 ![CLI Screenshot](docs/wordle-cheat.jpg)
 
