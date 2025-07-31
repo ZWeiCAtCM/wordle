@@ -207,6 +207,44 @@ An example run in cheat mode, left side shows the client side logs, right side s
 
 ---
 
-## Next Steps
+## Task 4: Multiplayer Mode
 
-- **Task 4**: Implement multiplayer mode.
+**Server support**:
+
+The server now supports multiple players guessing the same word and monitoring each other's progress.
+
+**Endpoints**:
+
+1. **Join Game**
+   ```
+   POST /games/{gameId}/join
+   Response: { "playerId": "<uuid>" }
+   ```
+2. **Submit Guess**
+   ```
+   POST /games/{gameId}/guesses
+   Headers: X-Player-Id: <playerId>
+   Body: { "guess": "apple" }
+   ```
+3. **View Progress**
+   ```
+   GET /games/{gameId}/progress
+   Response: [
+     { "playerId":"<id>", "turnsUsed":1, "hasWon":false, ... },
+     { "playerId":"<id>", "turnsUsed":2, "hasWon":false, ... }
+   ]
+   ```
+
+Use the same `gameId` returned by `POST /games`, then have each client `POST /join` to get its own `playerId`, include the header on guesses, and poll `/progress` to see all players' states.
+
+You can also use to the postman Collection in the root of this repo for API call tests:
+
+```
+Sandbox-VR-Wordle.postman_collection.json
+```
+
+---
+
+## Client Usage
+
+In progress

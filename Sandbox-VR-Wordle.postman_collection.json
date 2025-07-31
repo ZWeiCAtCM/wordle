@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"guess\": \"apple\"\r\n}\r\n",
+					"raw": "{\r\n  \"guess\": \"fancy\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -27,7 +27,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/games/f29bce90-0063-4bf3-b6e8-47c4fee6c67a/guesses\n",
+					"raw": "http://localhost:8080/games/3996c3cc-e919-4886-97f5-152f671b1d45/guesses",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -35,8 +35,8 @@
 					"port": "8080",
 					"path": [
 						"games",
-						"f29bce90-0063-4bf3-b6e8-47c4fee6c67a",
-						"guesses\n"
+						"3996c3cc-e919-4886-97f5-152f671b1d45",
+						"guesses"
 					]
 				}
 			},
@@ -46,15 +46,197 @@
 			"name": "Get Game by ID",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/games/ece79692-e697-4463-b11c-b627538cf66b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"ece79692-e697-4463-b11c-b627538cf66b"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "New Game",
 			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/games",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join as A",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/join",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join as B",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/join",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
 				"method": "GET",
 				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "A Guess",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Player-Id",
+						"value": "6f6f61fb-c567-4b01-9f57-7aae6ac21393",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"guess\": \"quite\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/guesses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"guesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B Guess",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-Player-Id",
+						"value": "530b741d-94dc-45ef-8422-84e68af022c1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"guess\": \"panic\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/guesses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"guesses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Progress",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/progress",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"progress"
+					]
+				}
 			},
 			"response": []
 		}
