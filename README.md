@@ -186,6 +186,10 @@ curl -X POST http://localhost:8080/games/$ID/guesses \
      -d '{"guess":"hello"}'
 ```
 
+An example run in cheat mode:
+
+![CLI Screenshot](docs/wordle-cheat.jpg)
+
 ---
 
 ## Next Steps
