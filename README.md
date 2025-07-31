@@ -143,10 +143,14 @@ mvn -pl wordle-client exec:java
 ```
 
 Client interacts entirely via HTTP to the server.
+
 A game success looks like:
+
 ![CLI Screenshot](docs/wordle-client1.jpg)
 
+
 A game failure looks like:
+
 ![CLI Screenshot](docs/wordle-client2.jpg)
 
 ---
@@ -158,60 +162,12 @@ Cheating mode dynamically hosts the answer by always choosing the feedback bucke
 **Enable cheating** in the server by setting in `wordle-server/src/main/resources/application.properties`:
 
 ```properties
+# set mode to "cheat" or "normal"
 wordle.mode=cheat
+
+# common settings
 wordle.maxTurns=6
 wordle.wordFile=words.txt
-```
-
-**Configuration class** (`WordleGameConfig`):
-
-```java
-@Configuration
-public class WordleGameConfig {
-    @Value("${wordle.mode}")
-    private String mode;
-    @Value("${wordle.maxTurns}")
-    private int maxTurns;
-    @Value("${wordle.wordFile}")
-    private String wordFile;
-
-    @Bean
-    public WordleGame gamePrototype() throws IOException {
-        return "cheat".equalsIgnoreCase(mode)
-            ? new CheatingWordleGame(maxTurns, wordFile)
-            : new WordleGame(maxTurns, wordFile);
-    }
-}
-```
-
-**Service instantiation** in `GameService`:
-
-```java
-@Service
-public class GameService {
-    private final WordleGame prototype;
-    private final String wordFile;
-
-    public GameService(WordleGame prototype,
-                       @Value("${wordle.wordFile}") String wordFile) {
-        this.prototype = prototype;
-        this.wordFile = wordFile;
-    }
-
-    public UUID createGame() throws IOException {
-        WordleGame game = duplicate(prototype);
-        UUID id = UUID.randomUUID();
-        games.put(id, game);
-        return id;
-    }
-
-    private WordleGame duplicate(WordleGame src) throws IOException {
-        if (src instanceof CheatingWordleGame) {
-            return new CheatingWordleGame(src.getMaxTurns(), wordFile);
-        }
-        return new WordleGame(src.getMaxTurns(), wordFile);
-    }
-}
 ```
 
 **REST API** remains unchanged; endpoints `/games` and `/games/{id}/guesses` now transparently apply cheating logic.
