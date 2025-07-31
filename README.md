@@ -12,9 +12,9 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 
 - [Prerequisites](#prerequisites)
 - [Modules](#modules)
-- [Task 1: Command‑Line Interface](#task-1-command-line-interface)
-- [Task 2: Server](#task-2-server)
-- [Next Steps](#next-steps)
+- [Task 1: Normal wordle](#task-1-normal-wordle)
+- [Task 2: Server/client wordle](#task-2-Server/client-wordle)
+- [Task 3: Cheating Mode](#task-3-cheating-mode)
 
 ---
 
@@ -136,6 +136,13 @@ curl.exe -X POST http://localhost:8080/games/<uuid>/guesses \
 curl.exe http://localhost:8080/games/<uuid>
 # {"gameId":"<uuid>","turnsUsed":1,"hasWon":false,"isOver":false}
 ```
+
+You can also use to the postman Collection in the root of this repo for API call tests:
+
+```
+Sandbox-VR-Wordle.postman_collection.json
+```
+
 ### Run Client
 
 ```bash
@@ -186,6 +193,12 @@ curl -X POST http://localhost:8080/games/$ID/guesses \
      -d '{"guess":"hello"}'
 ```
 
+You can also use to the postman Collection in the root of this repo for API call tests:
+
+```
+Sandbox-VR-Wordle.postman_collection.json
+```
+
 An example run in cheat mode:
 
 ![CLI Screenshot](docs/wordle-cheat.jpg)
@@ -195,6 +208,3 @@ An example run in cheat mode:
 ## Next Steps
 
 - **Task 4**: Implement multiplayer mode.
-
-Contributions and feedback are welcome!
-
