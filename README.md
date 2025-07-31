@@ -3,7 +3,8 @@
 This repository contains a multi‑module Maven project implementing a Wordle clone. It is structured into:
 
 - **wordle-core**: Core game logic and data model.
-- **wordle-cli**: A simple command‑line interface for playing Wordle (Task 1).
+- **wordle-cli**: A simple command‑line interface for playing Wordle (Task 1), uses classes in wordle-core directly.
+- **wordle-client**: Client side module that calls the server API to receive game states and trigger game actions.
 - **wordle-server**: REST API server for Task 2, handling game sessions and input validation.
 
 ---
@@ -12,8 +13,8 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 
 - [Prerequisites](#prerequisites)
 - [Modules](#modules)
-- [Task 1: Normal wordle](#task-1-normal-wordle)
-- [Task 2: Server/client wordle](#task-2-Server/client-wordle)
+- [Task 1: Normal wordle](#task-1-normal-wordle)
+- [Task 2: Server/client wordle](#task-2-serverclient-wordle)
 - [Task 3: Cheating Mode](#task-3-cheating-mode)
 
 ---
@@ -31,6 +32,7 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 ### wordle-core
 
 - Implements `WordleGame` and `WordleScorer`.
+- Implements `CheatingWordleGame` (Task 3).
 - Loads a 5‑letter word list from classpath (`src/main/resources/words.txt`).
 - Supports configurable **maxTurns** and **wordFile** via constructors.
 
