@@ -151,11 +151,90 @@ A game failure looks like:
 
 ---
 
+## Task 3: Cheating Mode
+
+Cheating mode dynamically hosts the answer by always choosing the feedback bucket that is **least** helpful to the player (fewest **HIT**, then fewest **PRESENT**).
+
+**Enable cheating** in the server by setting in `wordle-server/src/main/resources/application.properties`:
+
+```properties
+wordle.mode=cheat
+wordle.maxTurns=6
+wordle.wordFile=words.txt
+```
+
+**Configuration class** (`WordleGameConfig`):
+
+```java
+@Configuration
+public class WordleGameConfig {
+    @Value("${wordle.mode}")
+    private String mode;
+    @Value("${wordle.maxTurns}")
+    private int maxTurns;
+    @Value("${wordle.wordFile}")
+    private String wordFile;
+
+    @Bean
+    public WordleGame gamePrototype() throws IOException {
+        return "cheat".equalsIgnoreCase(mode)
+            ? new CheatingWordleGame(maxTurns, wordFile)
+            : new WordleGame(maxTurns, wordFile);
+    }
+}
+```
+
+**Service instantiation** in `GameService`:
+
+```java
+@Service
+public class GameService {
+    private final WordleGame prototype;
+    private final String wordFile;
+
+    public GameService(WordleGame prototype,
+                       @Value("${wordle.wordFile}") String wordFile) {
+        this.prototype = prototype;
+        this.wordFile = wordFile;
+    }
+
+    public UUID createGame() throws IOException {
+        WordleGame game = duplicate(prototype);
+        UUID id = UUID.randomUUID();
+        games.put(id, game);
+        return id;
+    }
+
+    private WordleGame duplicate(WordleGame src) throws IOException {
+        if (src instanceof CheatingWordleGame) {
+            return new CheatingWordleGame(src.getMaxTurns(), wordFile);
+        }
+        return new WordleGame(src.getMaxTurns(), wordFile);
+    }
+}
+```
+
+**REST API** remains unchanged; endpoints `/games` and `/games/{id}/guesses` now transparently apply cheating logic.
+
+**Validate**:
+
+```bash
+# build and install core & server
+mvn clean install -DskipTests
+# start server
+mvn -pl wordle-server spring-boot:run
+# test cheating feedback
+ID=$(curl -s -X POST http://localhost:8080/games | jq -r .gameId)
+curl -X POST http://localhost:8080/games/$ID/guesses \
+     -H "Content-Type: application/json" \
+     -d '{"guess":"hello"}'
+```
+
+---
+
 ## Next Steps
 
-- **Task 3**: Add a “cheater” service to suggest optimal next guesses.
-- **Task 4**: Implement multiplayer mode (e.g., via WebSocket).
-- **wordle-frontend**: Build a web UI (React, Angular, etc.).
+- **Task 4**: Implement multiplayer mode.
 
 Contributions and feedback are welcome!
 
