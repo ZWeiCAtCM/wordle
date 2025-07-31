@@ -43,7 +43,7 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 - Shows per-guess feedback:
   - **[X]** = correct letter & position
   - **(X)** = correct letter wrong position
-  - \*\*  X  \*\* = letter not in word
+  -  X  = letter not in word
 
 
 ### wordle-server
