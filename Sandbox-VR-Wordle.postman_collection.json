@@ -43,26 +43,6 @@
 			"response": []
 		},
 		{
-			"name": "Get Game by ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/games/ece79692-e697-4463-b11c-b627538cf66b",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"games",
-						"ece79692-e697-4463-b11c-b627538cf66b"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "New Game",
 			"request": {
 				"method": "POST",
@@ -126,14 +106,6 @@
 						"join"
 					]
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": []
 			},
 			"response": []
 		},
@@ -225,7 +197,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/games/120358c6-83a9-4e08-bd92-236642e6b8e1/progress",
+					"raw": "http://localhost:8080/games/3dadfa31-42f0-491d-81f2-c33f9c62d99f/progress",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -233,7 +205,7 @@
 					"port": "8080",
 					"path": [
 						"games",
-						"120358c6-83a9-4e08-bd92-236642e6b8e1",
+						"3dadfa31-42f0-491d-81f2-c33f9c62d99f",
 						"progress"
 					]
 				}

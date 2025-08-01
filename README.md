@@ -197,13 +197,28 @@ The server now supports multiple players guessing the same word and monitoring e
    ]
    ```
 
-Use the same `gameId` returned by `POST /games`, then have each client `POST /join` to get its own `playerId`, include the header on guesses, and poll `/progress` to see all players' states.
+### Using the Postman Collection
 
-You can also use the postman Collection in the root of this repo for API call tests:
+A Postman collection (`Sandbox-VR-Wordle.postman_collection.json`) is provided in the project root. To test via Postman:
 
-```
-Sandbox-VR-Wordle.postman_collection.json
-```
+![CLI Screenshot](docs/postman.jpg)
+
+1. **Import** the collection into Postman.
+2. **New Game**: run the `New Game` request. Copy the `gameId` from the JSON response.
+3. **Join**:
+   - Run `Join as A`, paste the `gameId` into the URL, send, and copy the returned Player A `playerId`.
+   - Run `Join as B`, paste the `gameId` into the URL, send, and copy Player B `playerId`.
+4. **A Guess** / **B Guess**:
+   - Select the `A Guess` (or `B Guess`) request.
+   - Paste the `gameId` into the URL.
+   - Add a header `X-Player-Id: <playerId>` for the appropriate player.
+   - In the body, enter:
+     ```json
+     { "guess": "apple" }
+     ```
+   - Send the request to submit the guess and view feedback.
+5. **Get Progress**:
+   - Run the `Get Progress` request, paste the `gameId` into the URL, and send to view all players' current game states.
 
 ---
 
