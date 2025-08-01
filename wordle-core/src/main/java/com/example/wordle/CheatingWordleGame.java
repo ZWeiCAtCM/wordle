@@ -63,6 +63,8 @@ public class CheatingWordleGame extends WordleGame {
 
         // 6. Win condition: all hits
         if (isAllHit(this.lastMarks)) {
+            // ensure answer is set to the guessed candidate
+            this.answer = candidates.get(0);
             this.won = true;
             return true;
         }
