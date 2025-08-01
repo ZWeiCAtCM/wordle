@@ -114,38 +114,13 @@ The server listens on [**http://localhost:8080**](http://localhost:8080).
 | ------ | --------------------- | ------------------------------------ |
 | POST   | `/games`              | Create new game, returns `gameId`    |
 | POST   | `/games/{id}/guesses` | Submit guess, returns marks & status |
-| GET    | `/games/{id}`         | Retrieve current game state          |
+| GET    | `/games/{id}/progress`| Retrieve current game state          |
+| POST   | `/games/{id}/join`    | Join game and Retrieve player ID     |
 
 ### Examples
 
-**Create game**
+See examples in Task 4 section
 
-```bash
-curl.exe -X POST http://localhost:8080/games
-# {"gameId":"<uuid>"}
-```
-
-**Submit guess**
-
-```bash
-curl.exe -X POST http://localhost:8080/games/<uuid>/guesses \
-  -H "Content-Type: application/json" \
-  -d '{"guess":"apple"}'
-# {"marks":["HIT","MISS",…],"hasWon":false,"isOver":false,"turnsUsed":1}
-```
-
-**Query state**
-
-```bash
-curl.exe http://localhost:8080/games/<uuid>
-# {"gameId":"<uuid>","turnsUsed":1,"hasWon":false,"isOver":false}
-```
-
-You can also use to the postman Collection in the root of this repo for API call tests:
-
-```
-Sandbox-VR-Wordle.postman_collection.json
-```
 
 ### Run Client
 
@@ -155,7 +130,7 @@ mvn -pl wordle-client exec:java
 
 Client interacts entirely via HTTP to the server.
 
-A game success looks like:
+A single player game (legacy, now client works as two-player mode) success looks like:
 
 ![CLI Screenshot](docs/wordle-client1.jpg)
 
@@ -181,29 +156,7 @@ wordle.maxTurns=6
 wordle.wordFile=words.txt
 ```
 
-**REST API** remains unchanged; endpoints `/games` and `/games/{id}/guesses` now transparently apply cheating logic.
-
-**Validate**:
-
-```bash
-# build and install core & server
-mvn clean install -DskipTests
-# start server
-mvn -pl wordle-server spring-boot:run
-# test cheating feedback
-ID=$(curl -s -X POST http://localhost:8080/games | jq -r .gameId)
-curl -X POST http://localhost:8080/games/$ID/guesses \
-     -H "Content-Type: application/json" \
-     -d '{"guess":"hello"}'
-```
-
-You can also use to the postman Collection in the root of this repo for API call tests:
-
-```
-Sandbox-VR-Wordle.postman_collection.json
-```
-
-An example run in cheat mode, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
+A single player game (legacy, now client works as two-player mode) run in cheat mode, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
 
 ![CLI Screenshot](docs/wordle-cheat.jpg)
 
@@ -217,18 +170,25 @@ The server now supports multiple players guessing the same word and monitoring e
 
 **Endpoints**:
 
-1. **Join Game**
+
+1. **Create game**
+    ```
+    curl.exe -X POST http://localhost:8080/games
+    # {"gameId":"<uuid>"}
+    ```
+
+2. **Join Game**
    ```
    POST /games/{gameId}/join
    Response: { "playerId": "<uuid>" }
    ```
-2. **Submit Guess**
+3. **Submit Guess**
    ```
    POST /games/{gameId}/guesses
    Headers: X-Player-Id: <playerId>
    Body: { "guess": "apple" }
    ```
-3. **View Progress**
+4. **View Progress**
    ```
    GET /games/{gameId}/progress
    Response: [
@@ -239,7 +199,7 @@ The server now supports multiple players guessing the same word and monitoring e
 
 Use the same `gameId` returned by `POST /games`, then have each client `POST /join` to get its own `playerId`, include the header on guesses, and poll `/progress` to see all players' states.
 
-You can also use to the postman Collection in the root of this repo for API call tests:
+You can also use the postman Collection in the root of this repo for API call tests:
 
 ```
 Sandbox-VR-Wordle.postman_collection.json
