@@ -17,6 +17,7 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 - [Task 2: Server/client wordle](#task-2-serverclient-wordle)
 - [Task 3: Cheating Mode](#task-3-cheating-mode)
 - [Task 4: Multiplayer Mode](#task-4-multiplayer-mode)
+- [Trade-offs](#trade-offs)
 
 ---
 
@@ -275,4 +276,25 @@ An example run in two-player-cheat mode, player A winning, left side shows the c
 An example run in two-player-cheat mode, no winner, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
 
 ![CLI Screenshot](docs/wordle-multi-tie.jpg)
+---
+
+## Trade-offs
+
+To reduce complexity and improve maintainability:
+
+- **Single CLI process for two players**: avoids building a separate UI or Web front-end, while still enabling multiplayer in the terminal.
+- **Prototype-based service**: using a game prototype simplifies switching between normal and cheating modes without duplicating logic.
+- **HTTP header routing (**``**)**: keeps REST API stateless per request and easy to integrate with other clients.
+- **Core module reuse**: `wordle-core` stands alone so different modules (`cli`, `server`, `client`) share the same engine without duplication.
+- **Inheritance for cheating mode**: `CheatingWordleGame` extends `WordleGame`, isolating special logic and maximizing reuse.
+
+To enhance user experience:
+
+- **Immediate per-guess feedback**: players see markers in real-time, mirroring the Wordle experience.
+- **Alternating turns with clear prompts**: reduces confusion when two players share one interface.
+
+To centralize configuration:
+
+- **application.properties** in `wordle-server/src/main/resources` holds `cheat` or `normal`, `wordle.wordFile` and `wordle.maxTurns`, making it easy to adjust game settings without code changes.
+
 ---
