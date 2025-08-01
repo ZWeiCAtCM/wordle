@@ -4,8 +4,8 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 
 - **wordle-core**: Core game logic and data model.
 - **wordle-cli**: A simple command‑line interface for playing Wordle (Task 1), uses classes in wordle-core directly.
-- **wordle-client**: Client side module that calls the server API to receive game states and trigger game actions.
-- **wordle-server**: REST API server for Task 2, handling game sessions and input validation.
+- **wordle-client**: Client side module that calls the server API to receive game states and trigger game actions, two players will guess in turns(Task 4).
+- **wordle-server**: REST API server, handling game sessions and input validation (Task 2), supports host cheating mode(Task 3).
 
 ---
 
@@ -16,6 +16,7 @@ This repository contains a multi‑module Maven project implementing a Wordle cl
 - [Task 1: Normal wordle](#task-1-normal-wordle)
 - [Task 2: Server/client wordle](#task-2-serverclient-wordle)
 - [Task 3: Cheating Mode](#task-3-cheating-mode)
+- [Task 4: Multiplayer Mode](#task-4-multiplayer-mode)
 
 ---
 
@@ -245,6 +246,33 @@ Sandbox-VR-Wordle.postman_collection.json
 
 ---
 
+**Client supports two-player mode**:
+
+- Both Player A and Player B join the same game in one CLI session.
+- They alternate guesses in a single terminal, seeing per-guess feedback.
+- The first player to guess correctly wins; if both exhaust turns, the game ends in a draw.
+
 ## Client Usage
 
-In progress
+```bash
+mvn -pl wordle-client exec:java
+```
+
+**Client flow**:
+
+1. `POST /games` → get `gameId`
+2. `POST /games/{gameId}/join` twice → get `playerAId`, `playerBId`
+3. Alternate:
+   - Prompt Player A: input guess → `POST /games/{gameId}/guesses` with `X-Player-Id: playerAId`
+   - Prompt Player B: same with `playerBId`
+4. Feedback shown as `[X]`, `(X)`, `X` per guess
+5. Declare winner when `hasWon` is `true`
+
+An example run in two-player-cheat mode, player A winning, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
+
+![CLI Screenshot](docs/wordle-multi.jpg)
+
+An example run in two-player-cheat mode, no winner, left side shows the client side logs, right side shows the server side logs (indicating the dynamically changing word pool):
+
+![CLI Screenshot](docs/wordle-multi-tie.jpg)
+---
